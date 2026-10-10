@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const links = [
   { to: "/", label: "Inicio" },
   { to: "/tratamientos", label: "Tratamientos" },
   { to: "/contacto", label: "Contacto" },
-  { to: "/panel", label: "Panel clínica" },
+  { to: "/panel", label: "Ver demo para clínicas" },
 ] as const;
 
 export function Logo() {
@@ -33,9 +34,9 @@ export function SiteHeader() {
             Reservar cita
           </Link>
         </nav>
-        <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menú">
+        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)} aria-label="Menú" aria-expanded={open}>
           {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        </Button>
       </div>
       {open && (
         <nav className="flex flex-col gap-1 border-t border-border px-5 py-4 md:hidden">
