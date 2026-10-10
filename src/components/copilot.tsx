@@ -32,6 +32,7 @@ import {
   convertPlanToTasks,
   formatDemoDate,
   useFollowupTasks,
+  pendingPlanTaskCount,
   type DemoCase,
   type FollowupPlan,
 } from "@/lib/copilot";
@@ -54,10 +55,14 @@ export function Copilot({
   selectedCase,
   open,
   onOpenChange,
+  onPlanReady,
+  onTasksConverted,
 }: {
   selectedCase: DemoCase;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onPlanReady?: (() => void) | undefined;
+  onTasksConverted?: (() => void) | undefined;
 }) {
   const [history, setHistory] = useState<History>({});
   return (
@@ -89,6 +94,8 @@ export function Copilot({
           <ChatSession
             key={selectedCase.id}
             selectedCase={selectedCase}
+            onPlanReady={onPlanReady}
+            onTasksConverted={onTasksConverted}
             initialMessages={history[selectedCase.id]}
             onMessages={(messages) =>
               setHistory((prev) => ({ ...prev, [selectedCase.id]: messages }))
@@ -108,10 +115,14 @@ function ChatSession({
   selectedCase,
   initialMessages,
   onMessages,
+  onPlanReady,
+  onTasksConverted,
 }: {
   selectedCase: DemoCase;
   initialMessages?: ChatMessage[] | undefined;
   onMessages: (messages: ChatMessage[]) => void;
+  onPlanReady?: (() => void) | undefined;
+  onTasksConverted?: (() => void) | undefined;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>(
     () =>
@@ -134,7 +145,9 @@ function ChatSession({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const locked = useRef(false);
   const tasks = useFollowupTasks();
-  const converted = tasks.some((t) => t.caseId === selectedCase.id);
+  const countToAdd = pendingPlanTaskCount(selectedCase, tasks);
+  const converted = countToAdd === 0;
+  const [confirmation, setConfirmation] = useState<FollowupPlan | null>(null);
   useEffect(() => {
     textarea.current?.focus();
     return () => {
@@ -158,6 +171,7 @@ function ChatSession({
     textarea.current?.focus();
     timer.current = setTimeout(() => {
       const reply = demoReply(text.trim(), selectedCase);
+      if (reply.plan) onPlanReady?.();
       save([
         ...next,
         {
@@ -174,7 +188,9 @@ function ChatSession({
   }
   function convert(plan: FollowupPlan) {
     const count = convertPlanToTasks(selectedCase, plan);
-    if (!count) return;
+    setConfirmation(null);
+    if (!count) { toast.info("La propuesta ya está en el seguimiento; no se han duplicado tareas."); return; }
+    onTasksConverted?.();
     save([
       ...messages,
       {
@@ -219,7 +235,7 @@ function ChatSession({
                 <PlanCards
                   plan={m.plan}
                   converted={converted}
-                  onConvert={() => convert(m.plan as FollowupPlan)}
+                  onConvert={() => { if (m.plan) setConfirmation(m.plan); }}
                 />
               )}
             </Message>
@@ -247,6 +263,16 @@ function ChatSession({
         </ConversationContent>
         <ConversationScrollButton aria-label="Ir al último mensaje" />
       </Conversation>
+      {confirmation && (
+        <div role="region" aria-label="Confirmar conversión en tareas" className="shrink-0 border-t border-border bg-secondary/40 px-5 py-4">
+          <p className="text-sm font-semibold" role="status">Se añadirán {countToAdd} tareas al caso de {selectedCase.name}.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Tareas administrativas, no pautas clínicas. El borrador no se enviará.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button variant="ink" onClick={() => convert(confirmation)} disabled={!countToAdd}>Confirmar · Añadir {countToAdd} tareas</Button>
+            <Button variant="outline" onClick={() => setConfirmation(null)}>Cancelar</Button>
+          </div>
+        </div>
+      )}
       <div className="shrink-0 border-t border-border bg-background px-4 pb-4 pt-3">
         <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
           {quickActions.map((action) => (
@@ -362,6 +388,7 @@ function PlanCards({
         {converted ? <Check /> : <ClipboardList />}
         {converted ? "Tareas añadidas al caso" : "Convertir en tareas"}
       </Button>
+      <p className="text-xs text-muted-foreground">Tareas administrativas, no pautas clínicas.</p>
     </div>
   );
 }

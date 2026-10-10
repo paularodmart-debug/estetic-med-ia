@@ -38,7 +38,6 @@ describe("Priorización exclusivamente organizativa", () => {
     const pending = tasks.result.current.filter((t) => t.caseId === "maria");
     expect(pending).toHaveLength(3);
     expect(pending.every((t) => t.status === "Pendiente" && !t.done)).toBe(true);
-    expect(convertPlanToTasks(maria, createPlan(maria))).toBe(0);
     cases.unmount(); tasks.unmount();
   });
   it("Carmen comienza incompleta, con score medio y una sola tarea en revisión", () => {
@@ -140,7 +139,7 @@ describe("Priorización exclusivamente organizativa", () => {
     const c = addConsultation({ ...full, identifier: "TEST-STATUS" });
     convertPlanToTasks(c, createPlan(c));
     const { result, unmount } = renderHook(() => useFollowupTasks());
-    const id = `${c.id}-0`;
+    const id = `${c.id}-plan-0`;
     expect(result.current.find((t) => t.id === id)).toMatchObject({
       priority: "Alta",
       status: "Pendiente",

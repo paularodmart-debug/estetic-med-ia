@@ -254,8 +254,11 @@ export function useFollowupTasks() {
     () => serverTasks,
   );
 }
+export function pendingPlanTaskCount(c: DemoCase, entries: FollowupTask[]) {
+  return entries.some((t) => t.caseId === c.id && t.id === `${c.id}-plan-0`) ? 0 : 3;
+}
 export function convertPlanToTasks(c: DemoCase, plan: FollowupPlan) {
-  if (tasks.some((t) => t.caseId === c.id)) return 0;
+  if (!pendingPlanTaskCount(c, tasks)) return 0;
   const titles = [
     "Completar y validar los datos organizativos pendientes",
     "Revisar y aprobar el borrador de contacto",
@@ -264,7 +267,7 @@ export function convertPlanToTasks(c: DemoCase, plan: FollowupPlan) {
   tasks = [
     ...tasks,
     ...titles.map((title, i): FollowupTask => ({
-      id: `${c.id}-${i}`,
+      id: `${c.id}-plan-${i}`,
       caseId: c.id,
       title: i === 2 ? plan.action : title,
       date: plan.date,

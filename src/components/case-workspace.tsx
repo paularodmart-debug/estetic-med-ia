@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ClipboardList, Check, MessageCircle, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Copilot, CopilotAvatar } from "@/components/copilot";
@@ -14,17 +14,50 @@ import {
 import { ConsultationIntake, ConsultationAssessment } from "@/components/consultation-intake";
 import { TaskInbox } from "@/components/task-inbox";
 import { assessConsultation, type DemoRole } from "@/lib/followup";
+import { DemoPreview, demoSteps } from "@/components/demo-preview";
 
-export function CaseWorkspace({ role }: { role: DemoRole }) {
+export function CaseWorkspace({ role, onProfessional }: { role: DemoRole; onProfessional: () => void }) {
   const cases = useDemoCases();
   const [caseId, setCaseId] = useState(demoCases[0].id);
   const [open, setOpen] = useState(false);
   const selected = cases.find((c) => c.id === caseId) ?? demoCases[0];
   const allTasks = useFollowupTasks();
   const tasks = allTasks.filter((t) => t.caseId === selected.id);
+  const [guidedStep, setGuidedStep] = useState<number | null>(null);
+  const caseSection = useRef<HTMLElement>(null);
+  function openCopilot() {
+    onProfessional(); setOpen(true);
+    if (guidedStep !== null) setGuidedStep(1);
+  }
+  function scrollToCase() {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    caseSection.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    caseSection.current?.focus({ preventScroll: true });
+  }
   return (
     <>
-      <section className="mt-8 border-y border-border py-7">
+      <section aria-label="Recorrido de la demo" className="mt-8 grid items-start gap-7 border-b border-border pb-7 lg:grid-cols-2">
+        <div>
+          <h2 className="text-3xl">Recorrido de la demo</h2>
+          <ol className="my-5 space-y-2">
+            {demoSteps.map((step, i) => (
+              <li key={step}>
+                <Button variant={guidedStep === i ? "secondary" : "ghost"} aria-current={guidedStep === i ? "step" : undefined} className="h-auto w-full justify-start whitespace-normal py-3 text-left" onClick={() => {
+                  if (i === 0) { setGuidedStep(0); scrollToCase(); }
+                  else if (i === 1) openCopilot();
+                  else { setGuidedStep(i); openCopilot(); setGuidedStep(i); }
+                }}>
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border">{guidedStep !== null && guidedStep > i ? <Check className="size-4" /> : i + 1}</span>{step}
+                </Button>
+              </li>
+            ))}
+          </ol>
+          <Button variant="ink" onClick={() => { setCaseId("maria"); setOpen(false); setGuidedStep(0); scrollToCase(); }}>Empezar demo <ArrowUpRight /></Button>
+          <p role="status" className="mt-3 text-xs text-muted-foreground">{guidedStep === 4 ? "Recorrido completado · Tareas añadidas al seguimiento" : guidedStep !== null ? `Paso ${guidedStep + 1}: ${demoSteps[guidedStep]}` : "Cuatro pasos · Datos ficticios · Solo organización"}</p>
+        </div>
+        <DemoPreview />
+      </section>
+      <section ref={caseSection} tabIndex={-1} aria-label="Caso seleccionado" className="mt-8 scroll-mt-6 border-y border-border py-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-medium text-primary">
@@ -35,7 +68,7 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
           <div className="flex flex-wrap gap-2">
             <ConsultationIntake onCreated={(c) => setCaseId(c.id)} />
             {role === "Profesional" && (
-              <Button variant="ink" onClick={() => setOpen(true)}>
+                <Button variant="ink" onClick={openCopilot}>
                 <MessageCircle />
                 Abrir Copiloto
                 <ArrowUpRight />
@@ -53,7 +86,7 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
                 <Button
                   key={c.id}
                   variant={c.id === selected.id ? "secondary" : "ghost"}
-                  onClick={() => setCaseId(c.id)}
+                  onClick={() => { setCaseId(c.id); if (guidedStep !== null) setGuidedStep(0); }}
                   aria-pressed={c.id === selected.id}
                   className="h-auto w-60 shrink-0 items-start justify-start gap-3 whitespace-normal p-3 text-left lg:w-full"
                 >
@@ -215,7 +248,7 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
         </div>
         {role === "Profesional" && (
           <Button
-            onClick={() => setOpen(true)}
+            onClick={openCopilot}
             variant="ink"
             className="fixed bottom-5 right-5 z-40 h-12 gap-2 px-4 shadow-soft"
             aria-label={`Abrir Copiloto para ${selected.name}`}
@@ -229,16 +262,16 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
           selectedCase={selected}
           open={open && role === "Profesional"}
           onOpenChange={setOpen}
+          onPlanReady={() => { if (guidedStep !== null) setGuidedStep(2); }}
+          onTasksConverted={() => { if (guidedStep !== null) setGuidedStep(4); }}
         />
       </section>
-      {role === "Coordinación" && (
         <TaskInbox
           onViewCase={(id) => {
             setCaseId(id);
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         />
-      )}
     </>
   );
 }

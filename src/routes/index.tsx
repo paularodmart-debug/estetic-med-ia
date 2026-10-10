@@ -3,6 +3,7 @@ import { ShieldCheck, Sparkles, HeartHandshake } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import { treatments, team, euro } from "@/lib/clinic";
 import { Button } from "@/components/ui/button";
+import { DemoPreview } from "@/components/demo-preview";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,6 +42,7 @@ function Index() {
             <Button asChild variant="link" className="mt-2 h-auto whitespace-normal px-0 text-left">
               <Link to="/panel">Ver demo para clínicas <HeartHandshake className="size-4" /></Link>
             </Button>
+            <div className="mt-4"><DemoPreview /></div>
           </div>
         </div>
         <img src={hero} alt="Recepción de la clínica Estetic Med IA" width={1600} height={1008} className="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-soft" />
