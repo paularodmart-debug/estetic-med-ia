@@ -145,9 +145,9 @@ function ChatSession({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const locked = useRef(false);
   const tasks = useFollowupTasks();
-  const countToAdd = pendingPlanTaskCount(selectedCase, tasks);
-  const converted = countToAdd === 0;
   const [confirmation, setConfirmation] = useState<FollowupPlan | null>(null);
+  const countToAdd = pendingPlanTaskCount(selectedCase, tasks, confirmation ?? undefined);
+  const converted = countToAdd === 0;
   useEffect(() => {
     textarea.current?.focus();
     return () => {
