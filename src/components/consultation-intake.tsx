@@ -24,7 +24,7 @@ const empty: Consultation = { identifier: "", objective: "", area: "", priority:
 export function ConsultationIntake({ onCreated }: { onCreated: (c: DemoCase) => void }) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<Consultation>(empty);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof Consultation, string>>>({});
   function update(key: keyof Consultation, value: string) { setDraft(prev => ({ ...prev, [key]: value })); setErrors({}); }
   return <><Button variant="soft" onClick={() => setOpen(true)}><Plus />Nueva consulta</Button>
     <Dialog open={open} onOpenChange={setOpen}><DialogContent className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto rounded-lg">
