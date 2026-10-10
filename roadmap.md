@@ -12,8 +12,9 @@
 - [x] Selector de roles de demostración y revisión profesional.
 - [x] Verificar reglas organizativas y recorrido completo sin alterar la web pública.
 
-# Tercera iteración · Recorrido de demostración (sin implementar todavía)
-- [ ] Planificar el recorrido para el jurado conservando todas las funciones y límites actuales.
-- [ ] Incorporar la propuesta de valor literal al subtítulo del Panel y junto al acceso a la demo en Inicio.
-- [ ] Contrastar los tres casos: María completa y prioritaria con tareas pendientes; Carmen incompleta con score medio o bajo y revisión; Ana con tareas completadas y resolución organizativa.
-- [ ] Indicar en cada tarjeta que los datos son ficticios y el score es organizativo, no clínico.
+# Tercera iteración · Recorrido de demostración
+- [x] Preparar el guion de tres minutos para el jurado conservando todas las funciones y límites actuales.
+- [x] Incorporar la propuesta de valor literal al subtítulo del Panel y junto al acceso a la demo en Inicio.
+- [x] Contrastar los tres casos: María completa y prioritaria con tareas pendientes; Carmen incompleta con score medio o bajo y revisión; Ana con tareas completadas y resolución organizativa.
+- [x] Indicar en cada tarjeta que los datos son ficticios y el score es organizativo, no clínico.
+- [x] Verificar casos, reapertura, nueva consulta, plan, conversión, filtros y rechazo clínico; 22 pruebas y recorrido en ordenador y móvil sin errores.
