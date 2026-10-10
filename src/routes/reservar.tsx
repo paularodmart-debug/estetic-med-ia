@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { treatments, team, timeSlots, addAppointment, euro, todayISO, treatmentById } from "@/lib/clinic";
 
 export const Route = createFileRoute("/reservar")({
-  validateSearch: (s: Record<string, unknown>): { t?: string } => (typeof s.t === "string" ? { t: s.t } : {}),
+  validateSearch: (s: Record<string, unknown>): { t?: string } => (typeof s["t"] === "string" ? { t: s["t"] } : {}),
   head: () => ({
     meta: [
       { title: "Reservar cita — Estetic Med IA" },
@@ -21,11 +21,11 @@ export const Route = createFileRoute("/reservar")({
 
 function Page() {
   const { t } = Route.useSearch();
-  const [form, setForm] = useState({ treatmentId: t ?? treatments[0].id, date: todayISO(), time: "", patient: "", phone: "", email: "", notes: "" });
+  const [form, setForm] = useState({ treatmentId: t ?? treatments[0]!.id, date: todayISO(), time: "", patient: "", phone: "", email: "", notes: "" });
   const [done, setDone] = useState(false);
   const set = (k: keyof typeof form) => (e: { target: { value: string } }) => setForm({ ...form, [k]: e.target.value });
   const tr = treatmentById(form.treatmentId)!;
-  const professional = tr.category === "Bienestar" ? team[2].name : tr.category === "Facial" ? team[0].name : team[1].name;
+  const professional = tr.category === "Bienestar" ? team[2]!.name : tr.category === "Facial" ? team[0]!.name : team[1]!.name;
 
   if (done)
     return (
