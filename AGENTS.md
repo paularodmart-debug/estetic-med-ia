@@ -17,3 +17,4 @@
 - Keep consultation validation and organizational scoring in a pure browser-safe module with focused tests, so clinical text never influences prioritization.
 - Share in-memory cases and ticket state across intake, case workspace and Copiloto, so completion and task creation stay synchronized without external services.
 - Treat demo role selection as presentation only, never authorization, so the account-free demonstration makes no security claims.
+- Seed contrasting cases and tasks together in session memory and derive organizational resolution from current task statuses, so reload is reproducible and reopening work cannot leave a stale resolved label.

@@ -22,8 +22,8 @@ export const demoCases: [DemoCase, DemoCase, DemoCase] = [
     date: "2026-10-12",
     purpose: "Pendiente de coordinar una revisión con el equipo profesional.",
     channel: "Correo electrónico",
-    permission: null,
-    owner: null,
+    permission: "Registrado en la ficha ficticia",
+    owner: "Coordinación · Elena Ruiz",
   },
   {
     id: "carmen",
@@ -52,9 +52,9 @@ const initialConsultations: Consultation[] = [
   {
     identifier: "EM-001",
     objective: demoCases[0].purpose,
-    area: "No indicada",
+    area: "Coordinación de revisión",
     priority: "Alta",
-    information: "Último contacto y canal registrados; permiso y responsable pendientes.",
+    information: "Último contacto, canal, permiso y responsable registrados en la ficha ficticia.",
     nextAction: "Completar datos y coordinar revisión",
     date: demoCases[0].date,
   },
@@ -64,16 +64,16 @@ const initialConsultations: Consultation[] = [
     area: "",
     priority: "Media",
     information: "Permiso registrado; canal pendiente.",
-    nextAction: "Confirmar disponibilidad",
+    nextAction: "",
     date: demoCases[1].date,
   },
   {
     identifier: "EM-003",
     objective: demoCases[2].purpose,
-    area: "",
+    area: "Coordinación de agenda",
     priority: "Baja",
-    information: "Solicitud de cambio de horario",
-    nextAction: "",
+    information: "Cambio de horario confirmado y respuesta registrada en la ficha ficticia.",
+    nextAction: "Seguimiento organizativo cerrado; sin acciones pendientes",
     date: demoCases[2].date,
   },
 ];
@@ -223,9 +223,25 @@ export type FollowupTask = {
   owner: string;
   status: TaskStatus;
 };
-let tasks: FollowupTask[] = [];
+const initialTasks: FollowupTask[] = [
+  { id: "maria-0", caseId: "maria", title: "Confirmar disponibilidad para la revisión", date: "2026-10-12", done: false, priority: "Alta", owner: "Coordinación · Elena Ruiz", status: "Pendiente" },
+  { id: "maria-1", caseId: "maria", title: "Revisar y aprobar el borrador de contacto", date: "2026-10-12", done: false, priority: "Alta", owner: "Dra. Lucía Martín", status: "Pendiente" },
+  { id: "maria-2", caseId: "maria", title: "Coordinar revisión y registrar la confirmación", date: "2026-10-12", done: false, priority: "Alta", owner: "Coordinación · Elena Ruiz", status: "Pendiente" },
+  { id: "carmen-0", caseId: "carmen", title: "Revisar la ficha y completar el canal de contacto", date: "2026-10-13", done: false, priority: "Media", owner: "Dr. Javier Ortega", status: "En revisión" },
+  { id: "ana-0", caseId: "ana", title: "Revisar la solicitud de cambio de horario", date: "2026-10-14", done: true, priority: "Baja", owner: "Dra. Lucía Martín", status: "Completada" },
+  { id: "ana-1", caseId: "ana", title: "Confirmar el nuevo horario con recepción", date: "2026-10-14", done: true, priority: "Baja", owner: "Coordinación · Elena Ruiz", status: "Completada" },
+  { id: "ana-2", caseId: "ana", title: "Registrar la respuesta y cerrar el seguimiento organizativo", date: "2026-10-14", done: true, priority: "Baja", owner: "Coordinación · Elena Ruiz", status: "Completada" },
+];
+let tasks: FollowupTask[] = initialTasks;
 const listeners = new Set<() => void>();
-const serverTasks: FollowupTask[] = [];
+const serverTasks = initialTasks;
+export function organizationalStatus(caseId: string, entries: FollowupTask[]) {
+  const caseTasks = entries.filter((t) => t.caseId === caseId);
+  if (caseTasks.length && caseTasks.every((t) => t.status === "Completada"))
+    return "Resuelto organizativamente";
+  if (caseTasks.some((t) => t.status === "En revisión")) return "En revisión organizativa";
+  return caseTasks.length ? "Seguimiento pendiente" : "Sin tareas de seguimiento";
+}
 export function useFollowupTasks() {
   return useSyncExternalStore(
     (l) => {

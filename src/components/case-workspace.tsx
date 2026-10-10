@@ -9,10 +9,11 @@ import {
   toggleFollowupTask,
   formatDemoDate,
   createPlan,
+  organizationalStatus,
 } from "@/lib/copilot";
 import { ConsultationIntake, ConsultationAssessment } from "@/components/consultation-intake";
 import { TaskInbox } from "@/components/task-inbox";
-import type { DemoRole } from "@/lib/followup";
+import { assessConsultation, type DemoRole } from "@/lib/followup";
 
 export function CaseWorkspace({ role }: { role: DemoRole }) {
   const cases = useDemoCases();
@@ -54,7 +55,7 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
                   variant={c.id === selected.id ? "secondary" : "ghost"}
                   onClick={() => setCaseId(c.id)}
                   aria-pressed={c.id === selected.id}
-                  className="h-auto min-w-44 shrink-0 justify-start gap-3 whitespace-normal p-3 text-left"
+                  className="h-auto w-60 shrink-0 items-start justify-start gap-3 whitespace-normal p-3 text-left lg:w-full"
                 >
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card font-display text-lg">
                     {c.name
@@ -65,9 +66,21 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
                   </span>
                   <span className="min-w-0 break-words">
                     {c.name}
+                    <span className="mt-1 block text-xs font-normal text-foreground">
+                      {c.consultation ? `Prioridad ${c.consultation.priority.toLowerCase()} · ${assessConsultation(c.consultation).completeness}% completo` : "Información pendiente"}
+                    </span>
+                    <span className="mt-1 block text-xs font-normal text-primary">
+                      {organizationalStatus(c.id, allTasks)}
+                    </span>
+                    {role === "Coordinación" && c.consultation && (
+                      <span className="mt-1 block text-xs font-normal">Score organizativo: {assessConsultation(c.consultation).level}</span>
+                    )}
                     <span className="mt-1 block text-xs font-normal text-muted-foreground">
                       {allTasks.filter((t) => t.caseId === c.id && !t.done).length || "Sin"} tareas
                       pendientes
+                    </span>
+                    <span className="mt-2 block text-[11px] font-normal leading-relaxed text-muted-foreground">
+                      Datos ficticios · El score solo organiza el trabajo; no es clínico.
                     </span>
                   </span>
                 </Button>
@@ -82,8 +95,8 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
                   Caso ficticio · {selected.professional}
                 </p>
               </div>
-              <span className="rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
-                Seguimiento organizativo
+              <span aria-live="polite" className="rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
+                {organizationalStatus(selected.id, allTasks)}
               </span>
             </div>
             <p className="mt-4 text-sm leading-relaxed">{selected.purpose}</p>
