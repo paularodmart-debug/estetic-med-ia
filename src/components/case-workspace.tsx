@@ -43,8 +43,8 @@ export function CaseWorkspace({ role }: { role: DemoRole }) {
             )}
           </div>
         </div>
-        <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-          <div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+          <div className="min-w-0">
             <h3 className="mb-3 font-sans text-xs font-semibold text-muted-foreground">
               CASOS FICTICIOS · {cases.length}
             </h3>
