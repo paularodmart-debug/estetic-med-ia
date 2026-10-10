@@ -18,3 +18,10 @@
 - [x] Contrastar los tres casos: María completa y prioritaria con tareas pendientes; Carmen incompleta con score medio o bajo y revisión; Ana con tareas completadas y resolución organizativa.
 - [x] Indicar en cada tarjeta que los datos son ficticios y el score es organizativo, no clínico.
 - [x] Verificar casos, reapertura, nueva consulta, plan, conversión, filtros y rechazo clínico; 22 pruebas y recorrido en ordenador y móvil sin errores.
+# Cuarta iteración · Impacto y demo guiada
+- [ ] Franja de cinco métricas calculadas y aviso de datos ficticios; 45 min como estimación de demostración.
+- [ ] Recorrido de cuatro pasos con inicio en María y progreso sin cambiar de página.
+- [ ] Mini-demo local de 45 segundos en Inicio y Panel, controles accesibles y vista estática.
+- [ ] Confirmación de conversión con recuento, éxito, sincronización y prevención de duplicados.
+- [ ] Revisar terminología y seguridad conservando los límites actuales.
+- [ ] Verificar reglas y recorridos.
