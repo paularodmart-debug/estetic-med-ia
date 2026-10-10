@@ -74,6 +74,9 @@ function Panel() {
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-primary">Gestión interna · Demo</p>
           <h1 className="mt-2 text-5xl">Panel de la clínica</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            Estetic Med IA convierte cada consulta en un siguiente paso organizado, revisable y seguro para el equipo de la clínica.
+          </p>
         </div>
         <div className="flex rounded-full border border-border bg-card p-1">
           {(["agenda", "pacientes"] as const).map((t) => (

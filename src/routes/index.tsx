@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, HeartHandshake } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import { treatments, team, euro } from "@/lib/clinic";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,6 +33,14 @@ function Index() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/reservar" className="rounded-full bg-ink px-7 py-3 text-ink-foreground transition hover:bg-ink/85">Reservar cita</Link>
             <Link to="/tratamientos" className="rounded-full border border-border bg-card px-7 py-3 transition hover:bg-accent">Ver tratamientos</Link>
+          </div>
+          <div className="mt-6 border-t border-border pt-4">
+            <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+              Estetic Med IA convierte cada consulta en un siguiente paso organizado, revisable y seguro para el equipo de la clínica.
+            </p>
+            <Button asChild variant="link" className="mt-2 h-auto whitespace-normal px-0 text-left">
+              <Link to="/panel">Ver demo para clínicas <HeartHandshake className="size-4" /></Link>
+            </Button>
           </div>
         </div>
         <img src={hero} alt="Recepción de la clínica Estetic Med IA" width={1600} height={1008} className="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-soft" />
