@@ -10,6 +10,8 @@ export const Route = createFileRoute("/tratamientos")({
       { name: "description", content: "Toxina botulínica, ácido hialurónico, láser, mesoterapia y más. Precios y duración." },
       { property: "og:title", content: "Tratamientos — Estetic Med IA" },
       { property: "og:description", content: "Descubre nuestros tratamientos faciales, corporales y láser." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

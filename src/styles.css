@@ -119,8 +119,17 @@
     color: var(--color-foreground);
     font-family: var(--font-body);
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; letter-spacing: 0; }
 }
 
 @utility bg-blush { background-image: var(--gradient-blush); }
 @utility shadow-soft { box-shadow: var(--shadow-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
