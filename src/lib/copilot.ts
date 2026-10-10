@@ -42,7 +42,7 @@ export const demoCases: [DemoCase, DemoCase, DemoCase] = [
     professional: "Dra. Lucía Martín",
     lastContact: "10/10/2026",
     date: "2026-10-14",
-    purpose: "Solicitud de cambio de horario pendiente de respuesta.",
+    purpose: "Cambio de horario confirmado y respuesta registrada. Seguimiento resuelto organizativamente.",
     channel: "Teléfono",
     permission: null,
     owner: "Recepción",
