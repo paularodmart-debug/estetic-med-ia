@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { treatments, team, timeSlots, addAppointment, euro, todayISO, treatmentById } from "@/lib/clinic";
 
 export const Route = createFileRoute("/reservar")({
-  validateSearch: (s: Record<string, unknown>) => ({ t: typeof s.t === "string" ? s.t : undefined }),
+  validateSearch: (s: Record<string, unknown>): { t?: string } => (typeof s.t === "string" ? { t: s.t } : {}),
   head: () => ({
     meta: [
       { title: "Reservar cita — Estetic Med IA" },
