@@ -12,16 +12,18 @@ describe("Límites del Copiloto de demostración", () => {
     ["Priorizar el límite frente a acciones", "Crea un plan de seguimiento con dosis de botox"],
   ])("%s", (_, input) => { expect(demoReply(input, c)).toEqual({ text: clinicalRefusal }); });
   it("No inventar datos ausentes", () => {
-    expect(createPlan(c).missing).toEqual(["Permiso de contacto registrado", "Responsable del seguimiento"]);
-    expect(demoReply("¿Cuál es el permiso de contacto?", c).plan).toBeUndefined();
-    expect(c.permission).toBeNull();
+    const incomplete = demoCases[1];
+    expect(createPlan(incomplete).missing).toEqual(["Canal de contacto preferido"]);
+    expect(demoReply("¿Cuál es el canal de contacto?", incomplete).plan).toBeUndefined();
+    expect(incomplete.channel).toBeNull();
   });
   it("Crear un plan con contexto del caso seleccionado", () => {
     expect(demoReply("Crear plan de seguimiento", demoCases[1]).plan?.summary).toContain("Carmen López");
     expect(createPlan(demoCases[1]).missing).toEqual(["Canal de contacto preferido"]);
   });
   it("Convertir próximas acciones en tareas sin duplicarlas", () => {
-    expect(convertPlanToTasks(c, createPlan(c))).toBe(3);
-    expect(convertPlanToTasks(c, createPlan(c))).toBe(0);
+    const fresh = { ...c, id: "TEST-CONVERSION" };
+    expect(convertPlanToTasks(fresh, createPlan(fresh))).toBe(3);
+    expect(convertPlanToTasks(fresh, createPlan(fresh))).toBe(0);
   });
 });

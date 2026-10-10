@@ -13,6 +13,8 @@ import {
   setFollowupStatus,
   useFollowupTasks,
   toggleFollowupTask,
+  useDemoCases,
+  organizationalStatus,
 } from "./copilot";
 
 const full: Consultation = {
@@ -25,6 +27,43 @@ const full: Consultation = {
   date: "2026-10-20",
 };
 describe("Priorización exclusivamente organizativa", () => {
+  it("María comienza con información completa, prioridad alta y varias tareas pendientes", () => {
+    const cases = renderHook(() => useDemoCases());
+    const tasks = renderHook(() => useFollowupTasks());
+    const maria = cases.result.current.find((c) => c.id === "maria");
+    expect(maria?.consultation?.priority).toBe("Alta");
+    if (!maria?.consultation) throw new Error("Falta la consulta de María");
+    expect(assessConsultation(maria.consultation).completeness).toBe(100);
+    expect(createPlan(maria).missing).toEqual([]);
+    const pending = tasks.result.current.filter((t) => t.caseId === "maria");
+    expect(pending).toHaveLength(3);
+    expect(pending.every((t) => t.status === "Pendiente" && !t.done)).toBe(true);
+    expect(convertPlanToTasks(maria, createPlan(maria))).toBe(0);
+    cases.unmount(); tasks.unmount();
+  });
+  it("Carmen comienza incompleta, con score medio y una sola tarea en revisión", () => {
+    const cases = renderHook(() => useDemoCases());
+    const tasks = renderHook(() => useFollowupTasks());
+    const carmen = cases.result.current.find((c) => c.id === "carmen");
+    if (!carmen?.consultation) throw new Error("Falta la consulta de Carmen");
+    expect(assessConsultation(carmen.consultation)).toMatchObject({ completeness: 71, level: "Medio" });
+    expect(tasks.result.current.filter((t) => t.caseId === "carmen")).toHaveLength(1);
+    expect(tasks.result.current.find((t) => t.caseId === "carmen")?.status).toBe("En revisión");
+    cases.unmount(); tasks.unmount();
+  });
+  it("Ana comienza resuelta organizativamente y reabrir una tarea revierte la resolución", () => {
+    const tasks = renderHook(() => useFollowupTasks());
+    const ana = tasks.result.current.filter((t) => t.caseId === "ana");
+    expect(ana).toHaveLength(3);
+    expect(ana.every((t) => t.done && t.status === "Completada")).toBe(true);
+    expect(organizationalStatus("ana", tasks.result.current)).toBe("Resuelto organizativamente");
+    act(() => toggleFollowupTask("ana-0"));
+    expect(organizationalStatus("ana", tasks.result.current)).toBe("Seguimiento pendiente");
+    act(() => toggleFollowupTask("ana-0"));
+    expect(organizationalStatus("ana", tasks.result.current)).toBe("Resuelto organizativamente");
+    expect(organizationalStatus("missing", tasks.result.current)).toBe("Sin tareas de seguimiento");
+    tasks.unmount();
+  });
   it("Calcula completitud sobre los siete campos rellenados", () => {
     expect(assessConsultation(full).completeness).toBe(100);
     expect(assessConsultation({ ...full, area: "", information: "", date: "" }).completeness).toBe(
