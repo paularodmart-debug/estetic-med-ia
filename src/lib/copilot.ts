@@ -12,7 +12,7 @@ const initialConsultations: Consultation[] = [
   { identifier: "EM-002", objective: demoCases[1].purpose, area: "", priority: "Media", information: "Permiso registrado; canal pendiente.", nextAction: "Confirmar disponibilidad", date: demoCases[1].date },
   { identifier: "EM-003", objective: demoCases[2].purpose, area: "", priority: "Baja", information: "Solicitud de cambio de horario", nextAction: "", date: demoCases[2].date },
 ];
-let cases: DemoCase[] = demoCases.map((c, i) => ({ ...c, consultation: initialConsultations[i] as Consultation }));
+let cases: DemoCase[] = demoCases.map((c, i) => { const consultation = initialConsultations[i]; return consultation ? { ...c, consultation } : c; });
 const serverCases = cases;
 const caseListeners = new Set<() => void>();
 export function useDemoCases() { return useSyncExternalStore(l => { caseListeners.add(l); return () => { caseListeners.delete(l); }; }, () => cases, () => serverCases); }
@@ -28,20 +28,23 @@ export const suggestions = ["Crear plan de seguimiento", "Analizar ficha", "Reda
 export const clinicalRefusal = "No puedo resolver consultas clínicas: no diagnostico, prescribo tratamientos, interpreto fotografías, prometo resultados ni doy recomendaciones médicas. Esta cuestión requiere la revisión del profesional responsable del caso.";
 export type FollowupPlan = { summary: string; missing: string[]; action: string; date: string; draft: string; review: string[] };
 export type DemoReply = { text: string; plan?: FollowupPlan; convert?: boolean };
+function isClinicalRequest(input: string) {
+  const normalized = input.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return /diagnost|prescrib|recet|dosis|medic|traitement|tratamiento|botox|toxina|hialuron|foto|imagen|sintoma|dolor|hincha|alerg|complic|infecc|embaraz|contraindic|resultado|efecto|sangr|piel|inyecc|clinico|clinica|urgenc|fiebre|quemad|riesgo|recomiend|recomenda|deberia tomar|es seguro|es normal|cuantas sesiones/.test(normalized);
+}
 export function createPlan(c: DemoCase): FollowupPlan {
   const missing = [!c.channel ? "Canal de contacto preferido" : null, !c.permission ? "Permiso de contacto registrado" : null, !c.owner ? "Responsable del seguimiento" : null].filter((v): v is string => v !== null);
   return {
     summary: `${c.name}: ${c.purpose} Último contacto registrado: ${c.lastContact}. Profesional: ${c.professional}.`,
-    missing, action: c.consultation?.nextAction || "Validar los datos de contacto y coordinar disponibilidad con recepción.", date: c.date,
+    missing, action: c.consultation?.nextAction ? (isClinicalRequest(c.consultation.nextAction) ? "Solicitar revisión del profesional; no convertir la solicitud clínica en una indicación." : c.consultation.nextAction) : "Validar los datos de contacto y coordinar disponibilidad con recepción.", date: c.date,
     draft: `Hola, ${c.name.split(" ")[0]}. Te contactamos desde Estetic Med IA para coordinar tu próxima cita. ¿Puedes indicarnos tu disponibilidad? El equipo confirmará el horario contigo. Gracias.`,
     review: ["Validar la ficha y completar los datos organizativos pendientes.", "Aprobar la fecha administrativa orientativa y el borrador antes de contactar.", "Reservar toda valoración clínica al profesional responsable."],
   };
 }
 export function demoReply(input: string, c: DemoCase): DemoReply {
   const normalized = input.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  const clinical = /diagnost|prescrib|recet|dosis|medic|tratamiento|botox|toxina|hialuron|foto|imagen|sintoma|dolor|hincha|alerg|complic|infecc|embaraz|contraindic|resultado|efecto|sangr|piel|inyecc|clinico|clinica|urgenc|fiebre|quemad|riesgo|recomiend|recomenda|deberia tomar|es seguro|es normal|cuantas sesiones/;
   const approved = quickActions.includes(input as typeof quickActions[number]);
-  if (!approved && clinical.test(normalized)) return { text: clinicalRefusal };
+  if (!approved && isClinicalRequest(input)) return { text: clinicalRefusal };
   const plan = createPlan(c);
   if (normalized.includes("convertir") && normalized.includes("tarea")) return { text: "He preparado las acciones organizativas. Revisa la propuesta y confirma «Convertir en tareas» para añadirlas al seguimiento del caso.", plan, convert: true };
   if (normalized.includes("plan") && normalized.includes("seguimiento")) return { text: "He preparado una propuesta de seguimiento organizativo con los datos de este caso ficticio. Las fechas son orientativas; no son pautas clínicas.", plan };
