@@ -12,6 +12,8 @@ export const Route = createFileRoute("/contacto")({
       { name: "description", content: "Dirección, teléfono y horario de la clínica Estetic Med IA en Madrid." },
       { property: "og:title", content: "Contacto — Estetic Med IA" },
       { property: "og:description", content: "Escríbenos o visítanos en nuestra clínica de Madrid." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/reservar")({
       { name: "description", content: "Reserva online tu cita o valoración gratuita en Estetic Med IA." },
       { property: "og:title", content: "Reservar cita — Estetic Med IA" },
       { property: "og:description", content: "Elige tratamiento, día y hora en menos de un minuto." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Page,

@@ -13,7 +13,7 @@ import { demoReply, suggestions, quickActions, convertPlanToTasks, formatDemoDat
 export function CopilotAvatar() {
   return <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-secondary font-display text-2xl italic text-foreground">em<span className="mb-3 size-1 rounded-full bg-primary" /></span>;
 }
-type ChatMessage = UIMessage & { plan?: FollowupPlan };
+type ChatMessage = UIMessage & { plan?: FollowupPlan | undefined };
 type History = Record<string, ChatMessage[]>;
 
 export function Copilot({ selectedCase, open, onOpenChange }: { selectedCase: DemoCase; open: boolean; onOpenChange: (open: boolean) => void }) {
@@ -33,7 +33,7 @@ export function Copilot({ selectedCase, open, onOpenChange }: { selectedCase: De
   </Dialog>;
 }
 
-function ChatSession({ selectedCase, initialMessages, onMessages }: { selectedCase: DemoCase; initialMessages?: ChatMessage[]; onMessages: (messages: ChatMessage[]) => void }) {
+function ChatSession({ selectedCase, initialMessages, onMessages }: { selectedCase: DemoCase; initialMessages?: ChatMessage[] | undefined; onMessages: (messages: ChatMessage[]) => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>(() => initialMessages ?? [{ id: "welcome", role: "assistant", parts: [{ type: "text", text: `Hola. Tengo cargado el caso ficticio de **${selectedCase.name}**.\n\n${selectedCase.purpose}\n\n¿Qué quieres preparar para su seguimiento?` }] }]);
   const [busy, setBusy] = useState(false);
   const [input, setInput] = useState("");

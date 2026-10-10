@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react";
 
 export type DemoCase = { id: string; name: string; professional: string; lastContact: string; date: string; purpose: string; channel: string | null; permission: string | null; owner: string | null };
-export const demoCases: DemoCase[] = [
+export const demoCases: [DemoCase, DemoCase, DemoCase] = [
   { id: "maria", name: "María García", professional: "Dra. Lucía Martín", lastContact: "09/10/2026", date: "2026-10-12", purpose: "Pendiente de coordinar una revisión con el equipo profesional.", channel: "Correo electrónico", permission: null, owner: null },
   { id: "carmen", name: "Carmen López", professional: "Dr. Javier Ortega", lastContact: "08/10/2026", date: "2026-10-13", purpose: "Pendiente de confirmar disponibilidad para la próxima cita.", channel: null, permission: "Registrado en la ficha ficticia", owner: "Recepción" },
   { id: "ana", name: "Ana Fernández", professional: "Dra. Lucía Martín", lastContact: "10/10/2026", date: "2026-10-14", purpose: "Solicitud de cambio de horario pendiente de respuesta.", channel: "Teléfono", permission: null, owner: "Recepción" },

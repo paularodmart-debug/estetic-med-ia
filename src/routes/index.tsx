@@ -10,6 +10,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Tratamientos faciales, corporales y láser con criterio médico. Reserva tu cita online." },
       { property: "og:title", content: "Estetic Med IA — Clínica de medicina estética" },
       { property: "og:description", content: "Tratamientos faciales, corporales y láser con criterio médico. Reserva tu cita online." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
