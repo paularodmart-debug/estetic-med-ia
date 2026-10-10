@@ -18,3 +18,7 @@
 - Share in-memory cases and ticket state across intake, case workspace and Copiloto, so completion and task creation stay synchronized without external services.
 - Treat demo role selection as presentation only, never authorization, so the account-free demonstration makes no security claims.
 - Seed contrasting cases and tasks together in session memory and derive organizational resolution from current task statuses, so reload is reproducible and reopening work cannot leave a stale resolved label.
+- Derive demo impact from shared live tasks and the reference cases in a pure browser-safe module, so estimates stay separate from clinical outcomes.
+- Share a local timed demo preview between public and internal screens, with reduced-motion static scenes, so no audiovisual service is required.
+- Keep guided progress in the case workspace and advance it through Copiloto callbacks, so the actual case flow stays on one page.
+- Identify converted plan tasks separately from seeded tasks and require a previewed count before UI confirmation, so seeded cases can demonstrate conversion without duplicating a converted batch.

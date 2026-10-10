@@ -254,23 +254,30 @@ export function useFollowupTasks() {
     () => serverTasks,
   );
 }
-export function convertPlanToTasks(c: DemoCase, plan: FollowupPlan) {
-  if (tasks.some((t) => t.caseId === c.id)) return 0;
-  const titles = [
+function pendingPlanTitles(c: DemoCase, plan: FollowupPlan, entries: FollowupTask[]) {
+  if (entries.some((t) => t.caseId === c.id && t.id === `${c.id}-plan-0`)) return [];
+  return [
     "Completar y validar los datos organizativos pendientes",
     "Revisar y aprobar el borrador de contacto",
-    "Coordinar disponibilidad y registrar la respuesta",
-  ];
+    plan.action,
+  ].filter((title) => !entries.some((t) => t.caseId === c.id && t.title === title));
+}
+export function pendingPlanTaskCount(c: DemoCase, entries: FollowupTask[], plan = createPlan(c)) {
+  return pendingPlanTitles(c, plan, entries).length;
+}
+export function convertPlanToTasks(c: DemoCase, plan: FollowupPlan) {
+  const titles = pendingPlanTitles(c, plan, tasks);
+  if (!titles.length) return 0;
   tasks = [
     ...tasks,
     ...titles.map((title, i): FollowupTask => ({
-      id: `${c.id}-${i}`,
+      id: `${c.id}-plan-${i}`,
       caseId: c.id,
-      title: i === 2 ? plan.action : title,
+      title,
       date: plan.date,
       done: false,
       priority: c.consultation?.priority ?? "Media",
-      owner: i === 1 ? c.professional : "Coordinación · Elena Ruiz",
+      owner: title === "Revisar y aprobar el borrador de contacto" ? c.professional : "Coordinación · Elena Ruiz",
       status: "Pendiente",
     })),
   ];

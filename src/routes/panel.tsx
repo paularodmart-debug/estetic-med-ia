@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CaseWorkspace } from "@/components/case-workspace";
+import { DemoImpact } from "@/components/demo-impact";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -93,6 +94,7 @@ function Panel() {
         </div>
       </div>
 
+      <DemoImpact role={role} />
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
         <p className="text-xs text-muted-foreground">
           Datos ficticios · Sesión de demo · Se reinicia al recargar
@@ -110,7 +112,7 @@ function Panel() {
           </select>
         </div>
       </div>
-      <CaseWorkspace role={role} />
+      <CaseWorkspace role={role} onProfessional={() => setRole("Profesional")} />
 
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat icon={CalendarDays} label="Citas hoy" value={todays.length} />
