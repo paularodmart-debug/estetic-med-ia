@@ -14,3 +14,6 @@
 - Keep Copiloto safety checks and follow-up task mutations in a browser-safe domain module with focused tests, so all entry points enforce the same non-clinical limits.
 - Use AI Elements for the demonstration transcript and composer; transport is simulated locally because this MVP must not call an AI service.
 - Keep one conversation per selected case in session memory, with case-keyed chat instances, so conversations never leak between cases and reload starts a fresh demo.
+- Keep consultation validation and organizational scoring in a pure browser-safe module with focused tests, so clinical text never influences prioritization.
+- Share in-memory cases and ticket state across intake, case workspace and Copiloto, so completion and task creation stay synchronized without external services.
+- Treat demo role selection as presentation only, never authorization, so the account-free demonstration makes no security claims.
