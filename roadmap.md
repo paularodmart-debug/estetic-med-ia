@@ -25,3 +25,9 @@
 - [x] Confirmación de conversión con recuento, éxito, sincronización y prevención de duplicados.
 - [x] Revisar terminología y seguridad conservando los límites actuales.
 - [x] Verificar reglas y recorridos; 30 pruebas, métricas sincronizadas, conversión confirmada y vista estática sin desbordes ni errores.
+
+# Ajuste final · Claridad de etiquetas
+- [x] Mantener la mini-demo como «Demo rápida · 45 segundos» con contador «0 / 45 s».
+- [x] Renombrar la métrica a «Ahorro administrativo estimado de la demo» con «45 min de referencia · no es la duración de la demo».
+- [x] Añadir «Duración: 45 segundos» junto a la demo en Inicio y Panel, sin «45 min» cerca de su título.
+- [x] Verificar Inicio y Panel en ordenador y móvil; 29 pruebas y compilación sin errores.

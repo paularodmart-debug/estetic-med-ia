@@ -40,7 +40,10 @@ export function DemoPreview() {
   return (
     <article className="min-w-0 rounded-lg border border-border bg-card p-4 sm:p-5" aria-label="Demo rápida · 45 segundos">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-2xl">Demo rápida · 45 segundos</h3>
+        <div className="min-w-0">
+          <h3 className="text-2xl">Demo rápida · 45 segundos</h3>
+          <p className="mt-1 text-[11px] font-medium text-muted-foreground">Duración: 45 segundos</p>
+        </div>
         <span className="text-xs tabular-nums text-muted-foreground">{staticView ? "Sin movimiento" : `${Math.floor(elapsed)} / 45 s`}</span>
       </div>
       <div className={`mt-4 ${staticView ? "grid gap-4 sm:grid-cols-2" : "min-h-60"}`}>

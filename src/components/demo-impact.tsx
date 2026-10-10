@@ -15,7 +15,7 @@ export function DemoImpact({ role }: { role: DemoRole }) {
           { label: "Tareas pendientes", value: metrics.pending, icon: ClipboardList, note: "Incluye tareas en revisión" },
           { label: "Tareas completadas", value: metrics.completed, icon: CheckCheck, note: "Trabajo administrativo" },
           { label: "Información media disponible", value: `${metrics.information}%`, icon: FileCheck, note: "María, Carmen y Ana" },
-          { label: "Tiempo administrativo estimado ahorrado", value: `${metrics.estimatedMinutes} min`, icon: Clock3, note: "Estimación de demostración" },
+          { label: "Ahorro administrativo estimado de la demo", value: `${metrics.estimatedMinutes} min`, icon: Clock3, note: "45 min de referencia · no es la duración de la demo" },
         ].map(({ label, value, icon: Icon, note }) => (
           <div key={label} className="min-w-0">
             <dt className="flex min-h-10 items-start gap-2 text-xs text-muted-foreground"><Icon className="mt-0.5 size-4 shrink-0 text-primary" />{label}</dt>
