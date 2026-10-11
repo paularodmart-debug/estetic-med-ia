@@ -29,7 +29,10 @@ export function AiInquiry() {
   const pending = result ? pendingAnalysisTaskCount(result.key, result.tasks, tasks) : 0;
 
   const analyze = () => {
-    if (!text.trim()) return toast.error("Escribe una consulta ficticia para analizar.");
+    if (!text.trim()) {
+      toast.error("Escribe una consulta ficticia para analizar.");
+      return;
+    }
     setLoading(true);
     setResult(null);
     window.setTimeout(() => {
