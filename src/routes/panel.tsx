@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CaseWorkspace } from "@/components/case-workspace";
 import { DemoImpact } from "@/components/demo-impact";
+import { AiInquiry } from "@/components/ai-inquiry";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -95,6 +96,7 @@ function Panel() {
       </div>
 
       <DemoImpact role={role} />
+      <AiInquiry />
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5">
         <p className="text-xs text-muted-foreground">
           Datos ficticios · Sesión de demo · Se reinicia al recargar
