@@ -73,7 +73,7 @@ export function TaskInbox({ onViewCase }: { onViewCase: (id: string) => void }) 
                 <div>
                   <div className="mb-1 flex flex-wrap items-center gap-2">
                     <span className="text-xs font-semibold text-primary">
-                      {c?.name ?? "Caso no disponible"}
+                      {c?.name ?? t.caseName ?? "Caso no disponible"}
                     </span>
                     <span className="rounded-full bg-secondary/60 px-2 py-0.5 text-[11px]">
                       Prioridad {t.priority.toLowerCase()}
@@ -135,7 +135,7 @@ export function TaskInbox({ onViewCase }: { onViewCase: (id: string) => void }) 
             Detalle de tarea
           </DialogTitle>
           <DialogDescription>
-            Seguimiento organizativo · Caso ficticio {detailCase?.name}
+            Seguimiento organizativo · Caso ficticio {detailCase?.name ?? detail?.caseName}
           </DialogDescription>
           {detail && (
             <>

@@ -222,6 +222,7 @@ export type FollowupTask = {
   priority: Priority;
   owner: string;
   status: TaskStatus;
+  caseName?: string;
 };
 const initialTasks: FollowupTask[] = [
   { id: "maria-0", caseId: "maria", title: "Confirmar disponibilidad para la revisión", date: "2026-10-12", done: false, priority: "Alta", owner: "Coordinación · Elena Ruiz", status: "Pendiente" },
@@ -301,3 +302,33 @@ export const formatDemoDate = (date: string) =>
         year: "numeric",
       })
     : "Sin fecha · pendiente de acordar";
+
+export type AnalysisTaskInput = { title: string; owner: string; date: string; priority: Priority };
+export function analysisTaskId(key: string, i: number) {
+  return `ia-${key}-${i}`;
+}
+export function pendingAnalysisTaskCount(key: string, list: AnalysisTaskInput[], entries: FollowupTask[] = tasks) {
+  return list.filter((_, i) => !entries.some((t) => t.id === analysisTaskId(key, i))).length;
+}
+export function addAnalysisTasks(key: string, caseName: string, list: AnalysisTaskInput[]) {
+  const fresh = list
+    .map((t, i) => ({ t, id: analysisTaskId(key, i) }))
+    .filter(({ id }) => !tasks.some((x) => x.id === id));
+  if (!fresh.length) return 0;
+  tasks = [
+    ...tasks,
+    ...fresh.map(({ t, id }): FollowupTask => ({
+      id,
+      caseId: `ia-${key}`,
+      caseName,
+      title: t.title,
+      date: t.date,
+      done: false,
+      priority: t.priority,
+      owner: t.owner,
+      status: "Pendiente",
+    })),
+  ];
+  listeners.forEach((l) => l());
+  return fresh.length;
+}
