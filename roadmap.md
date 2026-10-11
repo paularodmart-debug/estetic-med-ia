@@ -33,6 +33,6 @@
 - [x] Verificar Inicio y Panel en ordenador y móvil; 29 pruebas y compilación sin errores.
 
 # Vídeo para el jurado
-- [ ] Crear vídeo de gráficos animados con pantallas reales y avisos de simulación.
-- [ ] Duración máxima solicitada: cinco minutos; preparar aproximadamente dos minutos, con análisis, confirmación, tareas y Copiloto.
-- [ ] Verificar las escenas y entregar MP4 sin modificar funciones de la app.
+- [x] Crear vídeo de gráficos animados con pantallas reales y avisos de simulación.
+- [x] Duración máxima solicitada: cinco minutos; vídeo final de dos minutos con análisis, confirmación, tareas y Copiloto.
+- [x] Verificar las quince escenas, uniones y duración; MP4 1280×720, 24 fps, sin audio; funciones de la app sin cambios.
