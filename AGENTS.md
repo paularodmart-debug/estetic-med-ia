@@ -21,4 +21,4 @@
 - Derive demo impact from shared live tasks and the reference cases in a pure browser-safe module, so estimates stay separate from clinical outcomes.
 - Share a local timed demo preview between public and internal screens, with reduced-motion static scenes, so no audiovisual service is required.
 - Keep guided progress in the case workspace and advance it through Copiloto callbacks, so the actual case flow stays on one page.
-- Identify converted plan tasks separately from seeded tasks and require a previewed count before UI confirmation, so seeded cases can demonstrate conversion without duplicating a converted batch.
+- Identify converted plan tasks separately from seeded tasks and require a previewed count before UI confirmation, so seeded cases can demonstrate conversion without duplicating a converted batch.- Simulate the Panel AI inquiry analysis locally in a pure module with tests, and key its converted tasks by inquiry so repeat conversions never duplicate.
