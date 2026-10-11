@@ -31,3 +31,8 @@
 - [x] Renombrar la métrica a «Ahorro administrativo estimado de la demo» con «45 min de referencia · no es la duración de la demo».
 - [x] Añadir «Duración: 45 segundos» junto a la demo en Inicio y Panel, sin «45 min» cerca de su título.
 - [x] Verificar Inicio y Panel en ordenador y móvil; 29 pruebas y compilación sin errores.
+
+# Vídeo para el jurado
+- [ ] Crear vídeo de gráficos animados con pantallas reales y avisos de simulación.
+- [ ] Duración máxima solicitada: cinco minutos; preparar aproximadamente dos minutos, con análisis, confirmación, tareas y Copiloto.
+- [ ] Verificar las escenas y entregar MP4 sin modificar funciones de la app.
